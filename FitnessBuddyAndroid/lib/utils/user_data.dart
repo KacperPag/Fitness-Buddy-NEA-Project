@@ -7,6 +7,7 @@ import 'package:fitnessbuddyandroid/screens/navigation_screen.dart';
 
 String userUid = FirebaseAuth.instance.currentUser!.uid;
 CollectionReference userAccountDataCollection = FirebaseFirestore.instance.collection('userAccountData');
+CollectionReference userWeightDataCollection = FirebaseFirestore.instance.collection('userAccountData/${userUid}/weight');
 late UserAccountData userData;
 List<UserNotificationData> userNotificationData = [];
 List<UserHeightData> userHeightData = [];
@@ -38,7 +39,7 @@ Future<DocumentSnapshot?> GetUserData() async {
       userHeightData.add(UserHeightData.fromJson(userHeightSnapshot.docs[i].data() as Map<String, dynamic>));
     }*/
     for (int i = 0; i < userWeightSnapshot.docs.length; i++) {
-      userWeightData.add(UserWeightData.fromJson(userWeightSnapshot.docs[i].data() as Map<String, dynamic>));
+      userWeightData.add(UserWeightData.fromJson(userWeightSnapshot.docs[i].id, userWeightSnapshot.docs[i].data() as Map<String, dynamic>));
     }
   }
   return null;
@@ -117,33 +118,39 @@ class UserNotificationData {
 }
 class UserHeightData {
   final Timestamp date;
+  final String image;
   final String height;
   final String unitType;
 
   UserHeightData({
     required this.date,
+    required this.image,
     required this.height,
     required this.unitType
   });
   static UserHeightData fromJson(Map<String, dynamic> data) => UserHeightData(
       date: data['date'],
+      image: data['image'],
       height: data['height'],
       unitType: data['unitType']
   );
 }
 class UserWeightData {
+  final String id;
   final Timestamp date;
   final String image;
   final String weight;
   final String unitType;
 
   UserWeightData({
+    required this.id,
     required this.date,
     required this.image,
     required this.weight,
     required this.unitType
   });
-  static UserWeightData fromJson(Map<String, dynamic> data) => UserWeightData(
+  static UserWeightData fromJson(String id, Map<String, dynamic> data) => UserWeightData(
+      id: id,
       date: data['date'],
       image: data['image'],
       weight: data['weight'],

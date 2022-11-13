@@ -3,9 +3,6 @@ import 'package:fitnessbuddyandroid/utils/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fitnessbuddyandroid/utils/activity_data.dart';
 
-
-String? activityId;
-
 class ActivityScreen extends StatefulWidget {
   final String activityId;
 
